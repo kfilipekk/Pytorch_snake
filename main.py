@@ -17,7 +17,7 @@ class Agent:
         self.epsilon = 0  ## Randomness
         self.gamma = 0.9  ## Discount rate
         self.memory = deque(maxlen=MAX_MEMORY)  ## popleft()
-        self.model = Linear_QNet(11, 256, 3)
+        self.model = Linear_QNet(13, 256, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
@@ -31,6 +31,9 @@ class Agent:
         dir_r = game.direction == Direction.RIGHT
         dir_u = game.direction == Direction.UP
         dir_d = game.direction == Direction.DOWN
+
+        food_distance = abs(game.food.x - game.head.x) + abs(game.food.y - game.head.y)
+        normalized_distance = food_distance / (game.w + game.h)
 
         state = [
             ## Danger straight
@@ -61,9 +64,12 @@ class Agent:
             game.food.x < game.head.x,  ## Food left
             game.food.x > game.head.x,  ## Food right
             game.food.y < game.head.y,  ## Food up
-            game.food.y > game.head.y   ## Food down
+            game.food.y > game.head.y,  ## Food down
+            
+            normalized_distance,
+            len(game.snake) / 100
         ]
-        return np.array(state, dtype=int)
+        return np.array(state, dtype=float)
 
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))  ## popleft if MAX_MEMORY is reached
@@ -81,10 +87,9 @@ class Agent:
         self.trainer.train_step(state, action, reward, next_state, done)
 
     def get_action(self, state):
-        ## Random moves: tradeoff between exploration & exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = max(5, 100 - self.n_games)
         final_move = [0, 0, 0]
-        if random.randint(0, 200) < self.epsilon:
+        if random.randint(0, 100) < self.epsilon:
             move = random.randint(0, 2)
             final_move[move] = 1
         else:

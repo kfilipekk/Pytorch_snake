@@ -1,0 +1,22 @@
+[project]
+name = "pytorch-snake"
+version = "0.1.0"
+description = "Deep Q-learning Snake game with PyTorch and Pygame."
+authors = [
+    { name = "Krystian Filipek", email = "kf446@cam.ac.uk" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "torch",
+    "pygame",
+    "matplotlib",
+    "ipython"
+]
+
+[tool.setuptools]
+py-modules = ["main", "game", "model", "graph", "pygame_test"]
+
+[project.urls]
+Homepage = "https://github.com/kfilipekk/Pytorch_snake"
