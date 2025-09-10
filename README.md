@@ -3,6 +3,10 @@
 
 A deep reinforcement learning Snake game built with PyTorch and Pygame. The agent learns to play Snake using Q-learning and neural networks. Built by Krystian Filipek
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/kfilipekk/Pytorch_snake/master/docs/images/demo.gif" alt="Snake AI Training Demo" width="600"/>
+</div>
+
 ## Features
 - **Classic Snake Gameplay** with AI training
 - **Deep Q-Network** with experience replay
